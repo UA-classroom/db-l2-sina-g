@@ -17,6 +17,32 @@ start with a connection parameter.
 - E.g, if you decide to use psycopg3, you'd be able to directly use pydantic models with the cursor, these examples are however using psycopg2 and RealDictCursor
 """
 
+from db_setup import get_connection
+from schemas import UserCreate, User
+
+def get_users():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    conn.close()
+    return [User(id=row["id"], name=row["name"], email=row["email"]) for row in rows]
+
+def add_user(user: UserCreate):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", (user.name, user.email))
+        conn.commit()
+        user_id = cursor.lastrowid
+        return User(id=user_id, name=user.name, email=user.email)
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        conn.close()
+
+
 
 ### THIS IS JUST AN EXAMPLE OF A FUNCTION FOR INSPIRATION FOR A LIST-OPERATION (FETCHING MANY ENTRIES)
 # def get_items(con):
