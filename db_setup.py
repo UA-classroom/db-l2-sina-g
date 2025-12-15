@@ -30,14 +30,14 @@ def create_tables():
     """
     connection = get_connection()
     
-    user_table ="""
+    user_table = """
     CREATE TABLE IF NOT EXISTS users(
         user_id SERIAL PRIMARY KEY,
         username VARCHAR(255) NOT NULL,
         email VARCHAR(320) UNIQUE NOT NULL,
         role VARCHAR(15) NOT NULL, -- 'teacher' or 'student' or 'admin'
         password TEXT NOT NULL,
-        created_at TIMESTAMPZ DEFAULT
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     """
     courses_table ="""
@@ -77,7 +77,7 @@ def create_tables():
         receiver_id INT NOT NULL REFERENCES users(user_id),
         course_id INT REFERENCES courses(course_id),
         content TEXT NOT NULL,
-        sent_at TIMESTAMPTZ DEFAULT 
+        sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     """
 
@@ -86,7 +86,7 @@ def create_tables():
         submission_id SERIAL PRIMARY KEY,
         assignment_id INT NOT NULL REFERENCES assignments(assignment_id),
         student_id INT NOT NULL REFERENCES users(user_id),
-        submitted_at TIMESTAMPTZ DEFAULT,
+        submitted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         url TEXT,
         grade VARCHAR(20),
         feedback TEXT
@@ -101,7 +101,7 @@ def create_tables():
         title VARCHAR(255) NOT NULL,
         type VARCHAR(50),     -- e.g., PDF, video, link
         url TEXT NOT NULL,
-        uploaded_at TIMESTAMPTZ DEFAULT
+        uploaded_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     """
 
@@ -113,7 +113,7 @@ def create_tables():
         status VARCHAR(50) NOT NULL,   -- present/absent/late
         recorded_at TIMESTAMP DEFAULT NOW(),
         url TEXT,                      -- optional attachment
-        uploaded_at TIMESTAMPRZ
+        uploaded_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     """
 
@@ -133,13 +133,13 @@ def create_tables():
         with connection.cursor() as cursor:
             cursor.execute(user_table)
             cursor.execute(courses_table)
+            cursor.execute(lessons_table)
             cursor.execute(enrollments_table)
             cursor.execute(assignments_table)
             cursor.execute(messages_table)
             cursor.execute(submissions_table)
             cursor.execute(resources_table)
             cursor.execute(attendance_table)
-            cursor.execute(lessons_table)
 
     if connection:
         connection.close()
