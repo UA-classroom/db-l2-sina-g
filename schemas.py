@@ -2,6 +2,12 @@
 # Pydantic schemas are used to validate data that you receive, or to make sure that whatever data
 # you send back to the client follows a certain structure
 
+# - At least 5-10 GET-endpoints done
+# - At least 5-10 POST-endpoints done
+# - At least 5-10 PUT-endpoints
+# - At least 5 DELETE-endpoints
+# - At least 1-2 PATCH endpoints done
+
 from datetime import date, datetime
 from pydantic import BaseModel, Field, EmailStr
 
@@ -55,6 +61,18 @@ class CoursePatch(BaseModel):
     teacher_id: int | None = None
     start_date: date | None = None
     end_date: date | None = None
+
+class CoursePut(BaseModel):
+    """
+    For fully replacing a course.
+    All fields must be provided.
+    """
+    id: int
+    title: str = Field(..., max_length=255)
+    description: str | None
+    teacher_id: int
+    start_date: date | None
+    end_date: date | None
 
 # --- ENROLLMENT ---
 class EnrollmentGet(BaseModel):
@@ -110,6 +128,10 @@ class SubmissionCreate(BaseModel):
     assignment_id: int
     student_id: int
     url: str | None
+
+class GradeUpdate(BaseModel):
+    grade: str | None
+    feedback: str | None
 
 # --- LESSON ---
 class LessonGet(BaseModel):
