@@ -186,6 +186,19 @@ class ResourceCreate(BaseModel):
     type: str | None
     url: str
 
+class ResourcePut(BaseModel):
+    id: int
+    course_id: int
+    lesson_id: int | None
+    title: str = Field(..., max_length=255)
+    type: str | None
+    url: str
+    uploaded_at: datetime
+
+class ResourceDelete(BaseModel):
+    id: int
+
+
 # --- ATTENDANCE ---
 class AttendanceGet(BaseModel):
     id: int
