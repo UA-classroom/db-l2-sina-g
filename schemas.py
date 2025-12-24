@@ -35,6 +35,9 @@ class UserPut(BaseModel):
     email: EmailStr
     role: str
 
+class UserDelete(BaseModel):
+    id: int
+
 # --- COURSE ---
 class CourseGet(BaseModel):
     id: int
@@ -73,6 +76,9 @@ class CoursePut(BaseModel):
     teacher_id: int
     start_date: date | None
     end_date: date | None
+
+class CourseDelete(BaseModel):
+    id: int
 
 # --- ENROLLMENT ---
 class EnrollmentGet(BaseModel):
