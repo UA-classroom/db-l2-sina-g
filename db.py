@@ -80,7 +80,6 @@ def get_all_users(con):
             users = cursor.fetchall()
     return users
 
-
 # -------------------------
 # COURSES
 # -------------------------
@@ -99,14 +98,12 @@ def create_course(con, title, description, teacher_id, start_date, end_date):
             course = cursor.fetchone()
     return course
 
-
 def get_course(con, course_id):
     with con:
         with con.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute("SELECT * FROM courses WHERE course_id = %s;", (course_id,))
             course = cursor.fetchone()
     return course
-
 
 def get_courses_by_teacher(con, teacher_id):
     with con:
@@ -135,7 +132,6 @@ def create_lesson(con, course_id, title, description, scheduled_at, duration_min
             )
             lesson = cursor.fetchone()
     return lesson
-
 
 def get_lessons_for_course(con, course_id):
     with con:
@@ -167,7 +163,6 @@ def enroll_user(con, user_id, course_id):
             except psycopg2.Error:
                 raise Exception("User is already enrolled or invalid IDs.")
     return enrollment
-
 
 def get_enrolled_students(con, course_id):
     with con:
