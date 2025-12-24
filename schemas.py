@@ -2,12 +2,6 @@
 # Pydantic schemas are used to validate data that you receive, or to make sure that whatever data
 # you send back to the client follows a certain structure
 
-# - At least 5-10 GET-endpoints done
-# - At least 5-10 POST-endpoints done
-# - At least 5-10 PUT-endpoints
-# - At least 5 DELETE-endpoints
-# - At least 1-2 PATCH endpoints done
-
 from datetime import date, datetime
 from pydantic import BaseModel, Field, EmailStr
 
@@ -42,23 +36,20 @@ class UserDelete(BaseModel):
 class CourseGet(BaseModel):
     id: int
     title: str
-    description: str | None
+    description: str | None = None
     teacher_id: int
-    start_date: date | None
-    end_date: date | None
+    start_date: date | None = None
+    end_date: date | None = None
 
 class CourseCreate(BaseModel):
     title: str = Field(..., max_length=255)
-    description: str | None
+    description: str | None = None
     teacher_id: int
-    start_date: date | None
-    end_date: date | None
+    start_date: date | None = None
+    end_date: date | None = None
 
 class CoursePatch(BaseModel):
-    """
-    For partially updating a course.
-    If a field is None, we skip updating it.
-    """
+    """For partially updating a course."""
     title: str | None = Field(None, max_length=255)
     description: str | None = None
     teacher_id: int | None = None
@@ -66,16 +57,13 @@ class CoursePatch(BaseModel):
     end_date: date | None = None
 
 class CoursePut(BaseModel):
-    """
-    For fully replacing a course.
-    All fields must be provided.
-    """
+    """For fully replacing a course."""
     id: int
     title: str = Field(..., max_length=255)
-    description: str | None
+    description: str | None = None
     teacher_id: int
-    start_date: date | None
-    end_date: date | None
+    start_date: date | None = None
+    end_date: date | None = None
 
 class CourseDelete(BaseModel):
     id: int
@@ -96,28 +84,28 @@ class AssignmentGet(BaseModel):
     id: int
     course_id: int
     title: str
-    description: str | None
-    due_date: datetime | None
+    description: str | None = None
+    due_date: datetime | None = None
 
 class AssignmentCreate(BaseModel):
     course_id: int
     title: str = Field(..., max_length=255)
-    description: str | None
-    due_date: datetime | None
+    description: str | None = None
+    due_date: datetime | None = None
 
 # --- MESSAGE ---
 class MessageGet(BaseModel):
     id: int
     sender_id: int
     receiver_id: int
-    course_id: int | None
+    course_id: int | None = None
     content: str
     sent_at: datetime
 
 class MessageCreate(BaseModel):
     sender_id: int
     receiver_id: int
-    course_id: int | None
+    course_id: int | None = None
     content: str
 
 # --- SUBMISSION ---
@@ -126,45 +114,45 @@ class SubmissionGet(BaseModel):
     assignment_id: int
     student_id: int
     submitted_at: datetime
-    url: str | None
-    grade: str | None
-    feedback: str | None
+    url: str | None = None
+    grade: str | None = None
+    feedback: str | None = None
 
 class SubmissionCreate(BaseModel):
     assignment_id: int
     student_id: int
-    url: str | None
+    url: str | None = None
 
 class GradeUpdate(BaseModel):
-    grade: str | None
-    feedback: str | None
+    grade: str | None = None
+    feedback: str | None = None
 
 # --- LESSON ---
 class LessonGet(BaseModel):
     id: int
     course_id: int
     title: str
-    description: str | None
-    scheduled_at: datetime | None
-    duration_minutes: int | None
-    location: str | None
+    description: str | None = None
+    scheduled_at: datetime | None = None
+    duration_minutes: int | None = None
+    location: str | None = None
 
 class LessonCreate(BaseModel):
     course_id: int
     title: str = Field(..., max_length=255)
-    description: str | None
-    scheduled_at: datetime | None
-    duration_minutes: int | None
-    location: str | None
+    description: str | None = None
+    scheduled_at: datetime | None = None
+    duration_minutes: int | None = None
+    location: str | None = None
 
 class LessonPut(BaseModel):
     id: int
     course_id: int
     title: str = Field(..., max_length=255)
-    description: str | None
-    scheduled_at: datetime | None
-    duration_minutes: int | None
-    location: str | None
+    description: str | None = None
+    scheduled_at: datetime | None = None
+    duration_minutes: int | None = None
+    location: str | None = None
 
 class LessonDelete(BaseModel):
     id: int
@@ -173,31 +161,30 @@ class LessonDelete(BaseModel):
 class ResourceGet(BaseModel):
     id: int
     course_id: int
-    lesson_id: int | None
+    lesson_id: int | None = None
     title: str
-    type: str | None
+    type: str | None = None
     url: str
     uploaded_at: datetime
 
 class ResourceCreate(BaseModel):
     course_id: int
-    lesson_id: int | None
+    lesson_id: int | None = None
     title: str = Field(..., max_length=255)
-    type: str | None
+    type: str | None = None
     url: str
 
 class ResourcePut(BaseModel):
     id: int
     course_id: int
-    lesson_id: int | None
+    lesson_id: int | None = None
     title: str = Field(..., max_length=255)
-    type: str | None
+    type: str | None = None
     url: str
     uploaded_at: datetime
 
 class ResourceDelete(BaseModel):
     id: int
-
 
 # --- ATTENDANCE ---
 class AttendanceGet(BaseModel):
@@ -206,21 +193,21 @@ class AttendanceGet(BaseModel):
     student_id: int
     status: str
     recorded_at: datetime
-    url: str | None
+    url: str | None = None
     uploaded_at: datetime
 
 class AttendanceCreate(BaseModel):
     lesson_id: int
     student_id: int
     status: str = Field(..., regex="^(present|absent|late)$")
-    url: str | None
+    url: str | None = None
 
 class AttendancePut(BaseModel):
     id: int
     lesson_id: int
     student_id: int
     status: str = Field(..., regex="^(present|absent|late)$")
-    url: str | None
+    url: str | None = None
     recorded_at: datetime
     uploaded_at: datetime
 
