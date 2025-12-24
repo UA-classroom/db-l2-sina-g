@@ -201,3 +201,15 @@ class AttendanceCreate(BaseModel):
     student_id: int
     status: str = Field(..., regex="^(present|absent|late)$")
     url: str | None
+
+class AttendancePut(BaseModel):
+    id: int
+    lesson_id: int
+    student_id: int
+    status: str = Field(..., regex="^(present|absent|late)$")
+    url: str | None
+    recorded_at: datetime
+    uploaded_at: datetime
+
+class AttendanceDelete(BaseModel):
+    id: int
