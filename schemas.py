@@ -157,6 +157,18 @@ class LessonCreate(BaseModel):
     duration_minutes: int | None
     location: str | None
 
+class LessonPut(BaseModel):
+    id: int
+    course_id: int
+    title: str = Field(..., max_length=255)
+    description: str | None
+    scheduled_at: datetime | None
+    duration_minutes: int | None
+    location: str | None
+
+class LessonDelete(BaseModel):
+    id: int
+
 # --- RESOURCE ---
 class ResourceGet(BaseModel):
     id: int
