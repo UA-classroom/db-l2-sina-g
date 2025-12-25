@@ -47,9 +47,9 @@ start with a connection parameter.
 #     return item_id
 
 
-# ============================================================
+# -------------------------------------------
 # USERS
-# ============================================================
+# -------------------------------------------
 
 def create_user(con, username, email, role, password):
     try:
@@ -66,7 +66,7 @@ def create_user(con, username, email, role, password):
     except psycopg2.Error as e:
         raise Exception(f"Database error: {e.pgerror}") from e
 
-def get_user(con, user_id):
+def get_user_by_id(con, user_id):
     try:
         with con:
             with con.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -117,9 +117,9 @@ def delete_user(con, user_id):
     except psycopg2.Error as e:
         raise Exception(f"User delete failed: {e.pgerror}") from e
 
-# ============================================================
+# -------------------------------------------
 # COURSES
-# ============================================================
+# -------------------------------------------
 
 def create_course(con, title, description, teacher_id, start_date, end_date):
     try:
@@ -187,9 +187,9 @@ def delete_course(con, course_id):
     except psycopg2.Error as e:
         raise Exception(f"Course delete failed: {e.pgerror}") from e
 
-# ============================================================
+# -------------------------------------------
 # LESSONS
-# ============================================================
+# -------------------------------------------
 
 def create_lesson(con, course_id, title, description, scheduled_at, duration_minutes, location):
     try:
@@ -253,9 +253,9 @@ def delete_lesson(con, lesson_id):
     except psycopg2.Error as e:
         raise Exception(f"Lesson delete failed: {e.pgerror}") from e
 
-# ============================================================
+# -------------------------------------------
 # RESOURCES
-# ============================================================
+# -------------------------------------------
 
 def add_resource(con, course_id, lesson_id, title, resource_type, url):
     try:
@@ -314,9 +314,9 @@ def delete_resource(con, resource_id):
     except psycopg2.Error as e:
         raise Exception(f"Resource delete failed: {e.pgerror}") from e
 
-# ============================================================
+# -------------------------------------------
 # ATTENDANCE
-# ============================================================
+# -------------------------------------------
 
 def create_attendance(con, lesson_id, student_id, status, url=None):
     try:

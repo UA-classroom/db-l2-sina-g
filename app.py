@@ -7,7 +7,31 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 # from db import create_user, get_user, get_all_users
-import db as queries  # ✅ Correct: import the whole module
+# import db as queries  # ✅ Correct: import the whole module
+from db import (
+    create_user,
+    get_user_by_id,
+    get_all_users,
+    update_user,
+    delete_user,
+    create_course,
+    get_course,
+    get_courses_by_teacher,
+    update_course,
+    delete_course,
+    create_lesson,
+    get_lessons,
+    update_lesson,
+    delete_lesson,
+    add_resource,
+    get_resources,
+    update_resource,
+    delete_resource,
+    create_attendance,
+    get_attendance,
+    update_attendance,
+    delete_attendance
+)
 
 # ✅ Import your Pydantic models
 from schemas import (
@@ -15,15 +39,28 @@ from schemas import (
     UserGet,
     UserPatch,
     UserPut,
+    CourseGet,
     CourseCreate,
-    LessonCreate,
+    CoursePatch,
+    CoursePut,
+    EnrollmentGet,
     EnrollmentCreate,
+    AssignmentGet,
     AssignmentCreate,
-    SubmissionCreate,
-    MessageCreate,
     MessageGet,
+    MessageCreate,
+    SubmissionGet,
+    SubmissionCreate,
+    GradeUpdate,
+    LessonGet,
+    LessonCreate,
+    LessonPut,
+    ResourceGet,
     ResourceCreate,
+    ResourcePut,
+    AttendanceGet,
     AttendanceCreate,
+    AttendancePut
 )
 
 """
@@ -61,28 +98,84 @@ but will have different HTTP-verbs.
 # USERS
 # -------------------------
 
-@app.post("/users/", status_code=201)
+@app.post("/users", status_code=201)
 def create_user_route(user: UserCreate):
     con = get_connection()
     try:
-        new_user = queries.create_user(con, **user.dict())
+        new_user = create_user(
+            con,
+            user.username,
+            user.email,
+            user.role,
+            user.password
+        )
         return {"user": new_user}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@app.get("/users/{user_id}")
-def get_user(user_id: int):
+@app.get("/users/{user_id}", response_model=UserGet)
+def get_user_route(user_id: int):
     con = get_connection()
-    user = queries.get_user(con, user_id)
+    user = get_user_by_id(con, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return {"user": user}
+    return user
 
 @app.get("/users/")
-def list_users():
+def list_users_route():
     con = get_connection()
-    users = queries.get_all_users(con)
+    users = get_all_users(con)
     return {"users": users}
+
+@app.put("/users/{user_id}", response_model=UserGet)
+def update_user_put_route(user_id: int, user: UserPut):
+    con = get_connection()
+    try:
+        updated = update_user(
+            con,
+            user_id,
+            user.username,
+            user.email,
+            user.role
+        )
+        return updated
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.patch("/users/{user_id}", response_model=UserGet)
+def update_user_patch_route(user_id: int, user: UserPatch):
+    con = get_connection()
+
+    existing = get_user_by_id(con, user_id)
+    if not existing:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    updated_data = {
+        "username": user.username or existing["username"],
+        "email": user.email or existing["email"],
+        "role": user.role or existing["role"],
+    }
+
+    try:
+        updated = update_user(
+            con,
+            user_id,
+            updated_data["username"],
+            updated_data["email"],
+            updated_data["role"]
+        )
+        return updated
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.delete("/users/{user_id}")
+def delete_user_route(user_id: int):
+    con = get_connection()
+    try:
+        deleted = delete_user(con, user_id)
+        return {"deleted": deleted}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 # -------------------------
 # COURSES
