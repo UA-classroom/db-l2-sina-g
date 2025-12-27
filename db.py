@@ -46,7 +46,6 @@ start with a connection parameter.
 #             item_id = cursor.fetchone()["id"]
 #     return item_id
 
-
 # -------------------------------------------
 # USERS
 # -------------------------------------------

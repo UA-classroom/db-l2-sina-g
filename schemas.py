@@ -19,8 +19,8 @@ class UserCreate(BaseModel):
     role: str = Field(..., regex="^(teacher|student|admin)$")
 
 class UserPatch(BaseModel):
-    """For updating a user."""
     username: str | None = Field(None, max_length=50)
+    email: EmailStr | None = None
     role: str | None = Field(None, regex="^(teacher|student|admin)$")
 
 class UserPut(BaseModel):
@@ -31,7 +31,7 @@ class UserPut(BaseModel):
 
 class UserDelete(BaseModel):
     id: int
-
+    
 # --- COURSE ---
 class CourseGet(BaseModel):
     id: int
