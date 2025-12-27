@@ -14,23 +14,6 @@ from db import (
     get_all_users,
     update_user,
     delete_user,
-    create_course,
-    get_course,
-    get_courses_by_teacher,
-    update_course,
-    delete_course,
-    create_lesson,
-    get_lessons,
-    update_lesson,
-    delete_lesson,
-    add_resource,
-    get_resources,
-    update_resource,
-    delete_resource,
-    create_attendance,
-    get_attendance,
-    update_attendance,
-    delete_attendance
 )
 
 # ✅ Import your Pydantic models
@@ -39,10 +22,12 @@ from schemas import (
     UserGet,
     UserPatch,
     UserPut,
+    UserDelete,
     CourseGet,
     CourseCreate,
     CoursePatch,
     CoursePut,
+    CourseDelete,
     EnrollmentGet,
     EnrollmentCreate,
     AssignmentGet,
@@ -55,13 +40,17 @@ from schemas import (
     LessonGet,
     LessonCreate,
     LessonPut,
+    LessonDelete,
     ResourceGet,
     ResourceCreate,
     ResourcePut,
+    ResourceDelete,
     AttendanceGet,
     AttendanceCreate,
-    AttendancePut
+    AttendancePut,
+    AttendanceDelete
 )
+
 
 """
 ADD ENDPOINTS FOR FASTAPI HERE

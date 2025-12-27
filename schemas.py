@@ -194,7 +194,7 @@ class AttendanceGet(BaseModel):
     status: str
     recorded_at: datetime
     url: str | None = None
-    uploaded_at: datetime
+    uploaded_at: datetime   
 
 class AttendanceCreate(BaseModel):
     lesson_id: int
