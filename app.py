@@ -6,8 +6,6 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
-# from db import create_user, get_user, get_all_users
-# import db as queries  # ✅ Correct: import the whole module
 from db import (
     create_user, 
     get_user_by_id, 
@@ -84,56 +82,9 @@ from schemas import (
     AttendancePut,
 )
 
-
-"""
-ADD ENDPOINTS FOR FASTAPI HERE
-Make sure to do the following:
-- Use the correct HTTP method (e.g get, post, put, delete)
-- Use correct STATUS CODES, e.g 200, 400, 401 etc. when returning a result to the user
-- Use pydantic models whenever you receive user data and need to validate the structure and data types (VG)
-This means you need some error handling that determine what should be returned to the user
-Read more: https://www.geeksforgeeks.org/10-most-common-http-status-codes/
-- Use correct URL paths the resource, e.g some endpoints should be located at the exact same URL, 
-but will have different HTTP-verbs.
-"""
-
-
-# INSPIRATION FOR A LIST-ENDPOINT - Not necessary to use pydantic models, but we could to ascertain that we return the correct values
-# @app.get("/items/")
-# def read_items():
-#     con = get_connection()
-#     items = get_items(con)
-#     return {"items": items}
-
-
-# INSPIRATION FOR A POST-ENDPOINT, uses a pydantic model to validate
-# @app.post("/validation_items/")
-# def create_item_validation(item: ItemCreate):
-#     con = get_connection()
-#     item_id = add_item_validation(con, item)
-#     return {"item_id": item_id}
-
-
-# IMPLEMENT THE ACTUAL ENDPOINTS! Feel free to remove
-
 # -------------------------
 # USERS
 # -------------------------
-
-# @app.post("/users", status_code=201)
-# def create_user_route(user: UserCreate):
-#     con = get_connection()
-#     try:
-#         new_user = create_user(
-#             con,
-#             user.username,
-#             user.email,
-#             user.role,
-#             user.password
-#         )
-#         return {"user": new_user}
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/users", status_code=201, response_model=UserGet)
 def create_user_route(user: UserCreate):
@@ -163,33 +114,12 @@ def list_users_route():
     con = get_connection()
     users = get_all_users(con)
     return users
-
-# @app.get("/users/")
-# def list_users_route():
-#     con = get_connection()
-#     users = get_all_users(con)
-#     return {"users": users}
-
-# @app.put("/users/{user_id}", response_model=UserGet)
-# def update_user_put_route(user_id: int, user: UserPut):
-#     con = get_connection()
-#     try:
-#         updated = update_user(
-#             con,
-#             user_id,
-#             user.username,
-#             user.email,
-#             user.role
-#         )
-#         return updated
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
     
 @app.put("/users/{user_id}", response_model=UserGet)
 def update_user_put_route(user_id: int, user: UserPut):
     con = get_connection()
 
-    if user_id != user.id:
+    if user_id != user.user_id:
         raise HTTPException(status_code=400, detail="ID mismatch")
 
     try:
@@ -229,15 +159,6 @@ def update_user_patch_route(user_id: int, user: UserPatch):
         return updated
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-# @app.delete("/users/{user_id}")
-# def delete_user_route(user_id: int):
-#     con = get_connection()
-#     try:
-#         deleted = delete_user(con, user_id)
-#         return {"deleted": deleted}
-#     except Exception as e:
-#         raise HTTPException(status_code=404, detail=str(e))
 
 @app.delete("/users/{user_id}", response_model=UserGet)
 def delete_user_route(user_id: int):

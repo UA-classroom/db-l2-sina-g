@@ -24,13 +24,13 @@ class UserPatch(BaseModel):
     role: str | None = Field(None, pattern="^(teacher|student|admin)$")
 
 class UserPut(BaseModel):
-    id: int
+    user_id: int
     username: str
     email: EmailStr
     role: str
 
 class UserDelete(BaseModel):
-    id: int
+    user_id: int
 
 # --- COURSE ---
 class CourseGet(BaseModel):
