@@ -6,22 +6,22 @@ from datetime import date, datetime
 from pydantic import BaseModel, Field, EmailStr
 
 # --- USER ---
-class UserGet(BaseModel):
-    id: int
-    username: str
-    email: EmailStr
-    role: str
-
 class UserCreate(BaseModel):
     username: str = Field(..., max_length=50)
     email: EmailStr
     password: str = Field(..., min_length=8)
-    role: str = Field(..., regex="^(teacher|student|admin)$")
+    role: str = Field(..., pattern="^(teacher|student|admin)$")
+
+class UserGet(BaseModel):
+    user_id: int
+    username: str
+    email: EmailStr
+    role: str
 
 class UserPatch(BaseModel):
     username: str | None = Field(None, max_length=50)
     email: EmailStr | None = None
-    role: str | None = Field(None, regex="^(teacher|student|admin)$")
+    role: str | None = Field(None, pattern="^(teacher|student|admin)$")
 
 class UserPut(BaseModel):
     id: int
@@ -31,7 +31,7 @@ class UserPut(BaseModel):
 
 class UserDelete(BaseModel):
     id: int
-    
+
 # --- COURSE ---
 class CourseGet(BaseModel):
     id: int
@@ -199,14 +199,14 @@ class AttendanceGet(BaseModel):
 class AttendanceCreate(BaseModel):
     lesson_id: int
     student_id: int
-    status: str = Field(..., regex="^(present|absent|late)$")
+    status: str = Field(..., pattern="^(present|absent|late)$")
     url: str | None = None
 
 class AttendancePut(BaseModel):
     id: int
     lesson_id: int
     student_id: int
-    status: str = Field(..., regex="^(present|absent|late)$")
+    status: str = Field(..., pattern="^(present|absent|late)$")
     url: str | None = None
     recorded_at: datetime
     uploaded_at: datetime
