@@ -40,6 +40,18 @@ from db import (
     get_lessons_by_course, 
     update_lesson, 
     delete_lesson,
+    create_resource, 
+    get_resource, 
+    get_resources_by_course, 
+    get_resources_by_lesson, 
+    update_resource, 
+    delete_resource,
+    create_attendance, 
+    get_attendance, 
+    get_attendance_by_lesson, 
+    get_attendance_by_student, 
+    update_attendance, 
+    delete_attendance,
 )
 
 # ✅ Import your Pydantic models
