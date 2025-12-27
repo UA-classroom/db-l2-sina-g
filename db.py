@@ -286,7 +286,7 @@ def patch_assignment(con, assignment_id, data: dict):
             WHERE assignment_id = %s
             RETURNING *;
         """
-
+        
         with con:
             with con.cursor(cursor_factory=RealDictCursor) as cursor:
                 cursor.execute(query, values)

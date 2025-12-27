@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-DATABASE_NAME = os.getenv("DATABASE_NAME")
+# Passing pasword and database url into variables
+DATABASE_NAME = os.getenv("DATABASE_NAME") 
 PASSWORD = os.getenv("PASSWORD")
-
 
 def get_connection():
     """
@@ -18,12 +18,13 @@ def get_connection():
     """
     return psycopg2.connect(
         dbname=DATABASE_NAME,
-        user="postgres",  # change if needed
+        user="postgres",  
         password=PASSWORD,
-        host="localhost",  # change if needed
-        port="5432",  # change if needed
+        host="localhost",  
+        port="5432",  
     )
 
+# Table structure
 def create_tables():
     """
     A function to create the necessary tables for the project.
@@ -129,6 +130,7 @@ def create_tables():
     );
     """
 
+    # Creating the tables 
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(user_table)
@@ -145,6 +147,5 @@ def create_tables():
         connection.close()
 
 if __name__ == "__main__":
-    # Only reason to execute this file would be to create new tables, meaning it serves a migration file
     create_tables()
     print("Tables created successfully.")
