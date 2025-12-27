@@ -265,6 +265,40 @@ def update_assignment(con, assignment_id, course_id, title, description, due_dat
 
     except psycopg2.Error as e:
         raise Exception(f"Assignment update failed: {e.pgerror}") from e
+    
+def patch_assignment(con, assignment_id, data: dict):
+    try:
+        fields = []
+        values = []
+
+        for key, value in data.items():
+            fields.append(f"{key} = %s")
+            values.append(value)
+
+        if not fields:
+            raise Exception("No fields to update.")
+
+        values.append(assignment_id)
+
+        query = f"""
+            UPDATE assignments
+            SET {', '.join(fields)}
+            WHERE assignment_id = %s
+            RETURNING *;
+        """
+
+        with con:
+            with con.cursor(cursor_factory=RealDictCursor) as cursor:
+                cursor.execute(query, values)
+                assignment = cursor.fetchone()
+
+                if not assignment:
+                    raise Exception("Assignment not found.")
+
+                return assignment
+
+    except psycopg2.Error as e:
+        raise Exception(f"Assignment update failed: {e.pgerror}") from e
 
 def delete_assignment(con, assignment_id):
     try:

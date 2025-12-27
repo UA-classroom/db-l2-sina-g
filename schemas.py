@@ -30,7 +30,6 @@ class UserDelete(BaseModel):
 
 # --- COURSE ---
 class CourseGet(BaseModel):
-    id: int
     title: str
     description: str | None = None
     teacher_id: int
@@ -54,7 +53,7 @@ class CoursePatch(BaseModel):
 
 class CoursePut(BaseModel):
     """For fully replacing a course."""
-    id: int
+    course_id: int
     title: str = Field(..., max_length=255)
     description: str | None = None
     teacher_id: int
@@ -77,7 +76,7 @@ class EnrollmentCreate(BaseModel):
 
 # --- ASSIGNMENT ---
 class AssignmentGet(BaseModel):
-    id: int
+    assignment_id: int
     course_id: int
     title: str
     description: str | None = None
@@ -89,24 +88,30 @@ class AssignmentCreate(BaseModel):
     description: str | None = None
     due_date: datetime | None = None
 
-# --- MESSAGE ---
-class MessageGet(BaseModel):
-    id: int
-    sender_id: int
-    receiver_id: int
+class AssignmentUpdate(BaseModel):
     course_id: int | None = None
-    content: str
-    sent_at: datetime
+    title: str | None = Field(None, max_length=255)
+    description: str | None = None
+    due_date: datetime | None = None
 
+# --- MESSAGE ---
 class MessageCreate(BaseModel):
     sender_id: int
     receiver_id: int
     course_id: int | None = None
     content: str
 
+class MessageGet(BaseModel):
+    message_id: int
+    sender_id: int
+    receiver_id: int
+    course_id: int | None = None
+    content: str
+    sent_at: datetime
+
 # --- SUBMISSION ---
 class SubmissionGet(BaseModel):
-    id: int
+    submission_id: int
     assignment_id: int
     student_id: int
     submitted_at: datetime
@@ -125,7 +130,7 @@ class GradeUpdate(BaseModel):
 
 # --- LESSON ---
 class LessonGet(BaseModel):
-    id: int
+    lesson_id: int
     course_id: int
     title: str
     description: str | None = None
@@ -142,7 +147,7 @@ class LessonCreate(BaseModel):
     location: str | None = None
 
 class LessonPut(BaseModel):
-    id: int
+    lesson_id: int
     course_id: int
     title: str = Field(..., max_length=255)
     description: str | None = None
@@ -155,7 +160,7 @@ class LessonDelete(BaseModel):
 
 # --- RESOURCE ---
 class ResourceGet(BaseModel):
-    id: int
+    resource_id: int
     course_id: int
     lesson_id: int | None = None
     title: str
@@ -171,7 +176,7 @@ class ResourceCreate(BaseModel):
     url: str
 
 class ResourcePut(BaseModel):
-    id: int
+    resource_id: int
     course_id: int
     lesson_id: int | None = None
     title: str = Field(..., max_length=255)
@@ -180,11 +185,11 @@ class ResourcePut(BaseModel):
     uploaded_at: datetime
 
 class ResourceDelete(BaseModel):
-    id: int
+    resource_id: int
 
 # --- ATTENDANCE ---
 class AttendanceGet(BaseModel):
-    id: int
+    attendance_id: int
     lesson_id: int
     student_id: int
     status: str
@@ -199,7 +204,7 @@ class AttendanceCreate(BaseModel):
     url: str | None = None
 
 class AttendancePut(BaseModel):
-    id: int
+    attendance_id: int
     lesson_id: int
     student_id: int
     status: str = Field(..., pattern="^(present|absent|late)$")
