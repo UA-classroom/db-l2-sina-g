@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
+# Importing db.py file structure for use in routes/endpoint
 from db import (
     create_user, 
     get_user_by_id, 
@@ -51,8 +52,7 @@ from db import (
     update_attendance, 
     delete_attendance,
 )
-
-# ✅ Import your Pydantic models
+# Importing Schemas data
 from schemas import (
     UserCreate,
     UserGet,
@@ -82,10 +82,8 @@ from schemas import (
     AttendancePut,
 )
 
-# -------------------------
-# USERS
-# -------------------------
 
+# USERS / routes
 @app.post("/users", status_code=201, response_model=UserGet)
 def create_user_route(user: UserCreate):
     con = get_connection()
