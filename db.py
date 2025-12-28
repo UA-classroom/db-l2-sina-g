@@ -1,4 +1,6 @@
 import psycopg2
+# RealDictCursor makes query results come back as Python dictionaries instead of tuples
+# It makes JSON‑like responses easier
 from psycopg2.extras import RealDictCursor
 
 # -----------------------------------------------------
@@ -15,7 +17,7 @@ def create_user(con, username, email, role, password):
                 """, (username, email, role, password))
                 return cursor.fetchone()
     except psycopg2.IntegrityError:
-        raise Exception("User creation failed: email already exists or invalid role.")
+        raise Exception("Failed to create user: email already exists or invalid role.")
     except psycopg2.Error as e:
         raise Exception(f"Database error: {e.pgerror}") from e
 
