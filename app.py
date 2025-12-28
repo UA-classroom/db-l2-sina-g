@@ -91,8 +91,8 @@ from schemas import (
     "/users", 
     status_code=201, 
     response_model=UserGet,
-    summary=" Route to create new user",
-    description="Creates a new user in the datbase using: username, email, role, and password.",
+    summary="Route to create new user",
+    description="Creates a new user in the database using: username, email, role, and password.",
     responses={
         201: {"description": "User successfully created"},
         400: {"description": "Invalid input or user already exists"},
@@ -120,7 +120,7 @@ def create_user_route(user: UserCreate): # Adding schema UserCreate
 @app.get("/users/{user_id}", response_model=UserGet)
 def get_user_route(user_id: int):
     """
-    Retrieve a single user by ID.
+    Get a single user by ID.
 
     This endpoint fetches a user from the database using the provided `user_id`.
     If the user exists, their data is returned in the `UserGet` response model.
